@@ -88,6 +88,27 @@ router.get('/getCartDetails', async (req, res) => {
     res.send(data)   
 })
 
+const storeSchema = require("../models/store")
+
+// Create store
+router.post('/createStore', async (req, res) => {
+  let store = new storeSchema({
+    name: req.body.name,
+    logo: req.body.logo,
+    cartProducts: res.cartProducts,
+  });
+  console.log(`${store} added`);
+  try {
+    await store.save().then(() => res.status(200).json({ newStore: store }));
+  } catch (error) {
+    res.send(`cant save new store: ${error.message}`);
+  }
+});
+// Get All Stores
+router.get('/getAllStores', async (req, res) => {
+    let data = await storeSchema.find()
+    res.send(data)   
+})
 
 
 
