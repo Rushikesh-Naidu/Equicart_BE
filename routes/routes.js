@@ -34,6 +34,48 @@ router.get('/userValid/:phone', async (req, res) => {
     })
     res.send(data)   
 })
+// update user cart details
+// router.post("/addUserCart", async (req, res) => {
+//     var _id = req.body._id;
+//     let data = await userSchema.find({
+//         "$or":
+//             {  
+//                 _id:_id
+//             }        
+//     })
+//     data.cartProducts = req.body.cartProducts;
+//            // now update it in MongoDB
+//            // res.update(function (err, data) {
+//            //     if (err) {
+//            //          res.send(`cant save cart: ${error.message}`);
+//            //     }
+//            //     // res.redirect('/user/' + user._id);
+//            // });   
+//             res.update(data)   
+
+// })
+router.put('/updateUserCart/:id', function(req, res) {
+    // var db = req.db;
+    var userToUpdate = req.params.id;
+    userSchema.collection('cartProducts').update({ _id: ObjectId(userToUpdate)}, req.body, function (err, result) {
+        res.send(
+            (err === null) ? {msg: ''} : {msg: err}
+        );
+    });
+});
+
+
+
+// Get user by id
+router.get('/getUser/:id', async (req, res) => {
+    try{
+        const data = await Model.findById(req.params.id);
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
 const productSchema = require("../models/products")
 
